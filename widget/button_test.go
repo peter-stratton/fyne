@@ -71,3 +71,47 @@ func TestButtonRenderer_Layout(t *testing.T) {
 	assert.Equal(t, theme.Padding()*2, render.icon.Position().X)
 	assert.Equal(t, theme.Padding()*2, render.MinSize().Width-render.label.Position().X-render.label.Size().Width)
 }
+
+func TestButton_Disable(t *testing.T) {
+	tapped := make(chan bool)
+	button := NewButton("Test", func() {
+		tapped <- true
+	})
+
+	button.Disable()
+	go test.Tap(button)
+	func() {
+		select {
+		case <-tapped:
+			assert.Fail(t, "Button should have been disabled")
+		case <-time.After(1 * time.Second):
+		}
+	}()
+}
+
+func TestButton_Enable(t *testing.T) {
+	tapped := make(chan bool)
+	button := NewButton("Test", func() {
+		tapped <- true
+	})
+
+	button.Disable()
+	go test.Tap(button)
+	func() {
+		select {
+		case <-tapped:
+			assert.Fail(t, "Button should have been disabled")
+		case <-time.After(1 * time.Second):
+		}
+	}()
+
+	button.Enable()
+	go test.Tap(button)
+	func() {
+		select {
+		case <-tapped:
+		case <-time.After(1 * time.Second):
+			assert.Fail(t, "Button should have been re-enabled")
+		}
+	}()
+}

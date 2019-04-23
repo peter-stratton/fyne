@@ -161,3 +161,30 @@ func TestRadio_AppendDuplicate(t *testing.T) {
 	assert.Equal(t, 1, len(radio.Options))
 	assert.Equal(t, 1, len(Renderer(radio).(*radioRenderer).items))
 }
+
+func TestRadio_Disable(t *testing.T) {
+	selected := ""
+	radio := NewRadio([]string{"Hi"}, func(sel string) {
+		selected = sel
+	})
+
+	radio.Disable()
+	radio.Tapped(&fyne.PointEvent{Position: fyne.NewPos(theme.Padding(), theme.Padding())})
+
+	assert.Equal(t, "", selected, "Radio should have been disabled.")
+}
+
+func TestRadio_Enable(t *testing.T) {
+	selected := ""
+	radio := NewRadio([]string{"Hi"}, func(sel string) {
+		selected = sel
+	})
+
+	radio.Disable()
+	radio.Tapped(&fyne.PointEvent{Position: fyne.NewPos(theme.Padding(), theme.Padding())})
+	assert.Equal(t, "", selected, "Radio should have been disabled.")
+
+	radio.Enable()
+	radio.Tapped(&fyne.PointEvent{Position: fyne.NewPos(theme.Padding(), theme.Padding())})
+	assert.Equal(t, "Hi", selected, "Radio should have been re-enabled.")
+}

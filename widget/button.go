@@ -152,9 +152,19 @@ func (b *Button) Hide() {
 	b.hide(b)
 }
 
+// Enable this widget, if it was previously disabled
+func (b *Button) Enable() {
+	b.enable(b)
+}
+
+// Disable this widget, if it was previously enabled
+func (b *Button) Disable() {
+	b.disable(b)
+}
+
 // Tapped is called when a pointer tapped event is captured and triggers any tap handler
 func (b *Button) Tapped(*fyne.PointEvent) {
-	if b.OnTapped != nil {
+	if b.OnTapped != nil && b.Enabled(){
 		b.OnTapped()
 	}
 }

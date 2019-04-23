@@ -71,3 +71,31 @@ func TestCheckStateIsCorrectAfterMultipleUpdates(t *testing.T) {
 		expectedCheckedState = !expectedCheckedState
 	}
 }
+
+func TestCheck_Disable(t *testing.T) {
+	checked := false
+	check := NewCheck("Test", func(on bool) {
+		checked = on
+	})
+
+	check.Disable()
+	check.Checked = checked
+	test.Tap(check)
+	assert.False(t, checked, "Check box should have been disabled.")
+}
+
+func TestCheck_Enable(t *testing.T) {
+	checked := false
+	check := NewCheck("Test", func(on bool) {
+		checked = on
+	})
+
+	check.Disable()
+	check.Checked = checked
+	test.Tap(check)
+	assert.False(t, checked, "Check box should have been disabled.")
+
+	check.Enable()
+	test.Tap(check)
+	assert.True(t, checked, "Check box should have been re-enabled.")
+}

@@ -173,6 +173,16 @@ func (r *Radio) Hide() {
 	r.hide(r)
 }
 
+// Enable this widget, if it was previously disabled
+func (r *Radio) Enable() {
+	r.enable(r)
+}
+
+// Disable this widget, if it was previously enabled
+func (r *Radio) Disable() {
+	r.disable(r)
+}
+
 // Append adds a new option to the end of a Radio widget.
 func (r *Radio) Append(option string) {
 	r.Options = append(r.Options, option)
