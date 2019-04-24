@@ -16,6 +16,7 @@ type builtinTheme struct {
 
 	button, text, icon, hyperlink, placeholder, primary, hover, scrollBar, shadow color.Color
 	regular, bold, italic, bolditalic, monospace                                  fyne.Resource
+	disabled, disabledText color.Color
 }
 
 // LightTheme defines the built in light theme colours and sizes
@@ -31,6 +32,8 @@ func LightTheme() fyne.Theme {
 		hover:       color.RGBA{0xe7, 0xe7, 0xe7, 0xff},
 		scrollBar:   color.RGBA{0x0, 0x0, 0x0, 0x99},
 		shadow:      color.RGBA{0x0, 0x0, 0x0, 0x99},
+		disabled:     color.RGBA{0xec, 0xec, 0xec, 0xff},
+		disabledText: color.RGBA{0x90, 0x90, 0x90, 0xff},
 	}
 
 	theme.initFonts()
@@ -50,6 +53,8 @@ func DarkTheme() fyne.Theme {
 		hover:       color.RGBA{0x31, 0x31, 0x31, 0xff},
 		scrollBar:   color.RGBA{0x0, 0x0, 0x0, 0x99},
 		shadow:      color.RGBA{0x0, 0x0, 0x0, 0x99},
+		disabled:     color.RGBA{0x90, 0x90, 0x90, 0xff},
+		disabledText: color.RGBA{0xbc, 0xbc, 0xbc, 0xff},
 	}
 
 	theme.initFonts()
@@ -108,6 +113,16 @@ func (t *builtinTheme) ScrollBarColor() color.Color {
 // ShadowColor returns the color (and translucency) for shadows used for indicating elevation
 func (t *builtinTheme) ShadowColor() color.Color {
 	return t.shadow
+}
+
+// DisabledColor returns the color for a disabled UI element
+func (t *builtinTheme) DisabledColor() color.Color {
+	return t.disabled
+}
+
+// DisabledColor returns the color for a disabled UI element
+func (t *builtinTheme) DisabledTextColor() color.Color {
+	return t.disabledText
 }
 
 // TextSize returns the standard text size
@@ -248,6 +263,16 @@ func FocusColor() color.Color {
 // ScrollBarColor returns the color (and translucency) for a scrollBar
 func ScrollBarColor() color.Color {
 	return current().ScrollBarColor()
+}
+
+// DisabledColor returns the color for a disabled UI element
+func DisabledColor() color.Color {
+	return current().DisabledColor()
+}
+
+// DisabledTextColor returns the color for a disabled UI element
+func DisabledTextColor() color.Color {
+	return current().DisabledTextColor()
 }
 
 // ShadowColor returns the color (and translucency) for shadows used for indicating elevation

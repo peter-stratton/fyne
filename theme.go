@@ -15,6 +15,8 @@ type Theme interface {
 	FocusColor() color.Color
 	ScrollBarColor() color.Color
 	ShadowColor() color.Color
+	DisabledColor() color.Color
+	DisabledTextColor() color.Color
 
 	TextSize() int
 	TextFont() Resource

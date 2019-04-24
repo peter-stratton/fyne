@@ -1,12 +1,11 @@
 package widget
 
 import (
-	"image/color"
-
 	"fyne.io/fyne"
 	"fyne.io/fyne/canvas"
 	"fyne.io/fyne/driver/desktop"
 	"fyne.io/fyne/theme"
+	"image/color"
 )
 
 type buttonRenderer struct {
@@ -63,13 +62,18 @@ func (b *buttonRenderer) Layout(size fyne.Size) {
 // ApplyTheme is called when the Button may need to update its look
 func (b *buttonRenderer) ApplyTheme() {
 	b.label.Color = theme.TextColor()
+	if b.button.disabled {
+		b.label.Color = theme.DisabledTextColor()
+	}
 
 	b.Refresh()
 }
 
 func (b *buttonRenderer) BackgroundColor() color.Color {
-	if b.button.Style == PrimaryButton {
+	if b.button.Style == PrimaryButton && !b.button.disabled {
 		return theme.PrimaryColor()
+	} else if b.button.disabled {
+		return theme.DisabledColor()
 	}
 
 	if b.button.hovered {
@@ -155,16 +159,18 @@ func (b *Button) Hide() {
 // Enable this widget, if it was previously disabled
 func (b *Button) Enable() {
 	b.enable(b)
+	Renderer(b).ApplyTheme()
 }
 
 // Disable this widget, if it was previously enabled
 func (b *Button) Disable() {
 	b.disable(b)
+	Renderer(b).ApplyTheme()
 }
 
 // Tapped is called when a pointer tapped event is captured and triggers any tap handler
 func (b *Button) Tapped(*fyne.PointEvent) {
-	if b.OnTapped != nil && b.Enabled(){
+	if b.OnTapped != nil && b.Enabled() {
 		b.OnTapped()
 	}
 }
