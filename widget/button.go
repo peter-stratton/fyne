@@ -195,8 +195,8 @@ func (b *Button) MouseOut() {
 func (b *Button) MouseMoved(*desktop.MouseEvent) {
 }
 
-// CreateRenderer is a private method to Fyne which returns a new buttonRenderer instance.  To refresh an existing
-// button, use the `widget.Renderer` function with a pointer to the existing button as the argument.
+// CreateRenderer is a private method to Fyne which returns a new renderer for this widget type.  To refresh an existing
+// widget, use the `widget.Renderer` function with a pointer to the existing widget as the argument.
 func (b *Button) CreateRenderer() fyne.WidgetRenderer {
 	var icon *canvas.Image
 	if b.Icon != nil {

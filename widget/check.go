@@ -139,7 +139,8 @@ func (c *Check) Tapped(*fyne.PointEvent) {
 func (c *Check) TappedSecondary(*fyne.PointEvent) {
 }
 
-// CreateRenderer is a private method to Fyne which links this widget to its renderer
+// CreateRenderer is a private method to Fyne which returns a new renderer for this widget type.  To refresh an existing
+// widget, use the `widget.Renderer` function with a pointer to the existing widget as the argument.
 func (c *Check) CreateRenderer() fyne.WidgetRenderer {
 	icon := canvas.NewImageFromResource(theme.CheckButtonIcon())
 
