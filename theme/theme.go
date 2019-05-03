@@ -14,8 +14,8 @@ import (
 type builtinTheme struct {
 	background color.Color
 
-	button, text, hyperlink, placeholder, primary, hover, scrollBar color.Color
-	regular, bold, italic, bolditalic, monospace                    fyne.Resource
+	button, text, icon, hyperlink, placeholder, primary, hover, scrollBar color.Color
+	regular, bold, italic, bolditalic, monospace                          fyne.Resource
 }
 
 // LightTheme defines the built in light theme colours and sizes
@@ -24,6 +24,7 @@ func LightTheme() fyne.Theme {
 		background:  color.RGBA{0xf5, 0xf5, 0xf5, 0xff},
 		button:      color.RGBA{0xd9, 0xd9, 0xd9, 0xff},
 		text:        color.RGBA{0x21, 0x21, 0x21, 0xff},
+		icon:        color.RGBA{0xff, 0x00, 0x00, 0xff},
 		hyperlink:   color.RGBA{0x0, 0x0, 0xd9, 0xff},
 		placeholder: color.RGBA{0x88, 0x88, 0x88, 0xff},
 		primary:     color.RGBA{0x9f, 0xa8, 0xda, 0xff},
@@ -41,6 +42,7 @@ func DarkTheme() fyne.Theme {
 		background:  color.RGBA{0x42, 0x42, 0x42, 0xff},
 		button:      color.RGBA{0x21, 0x21, 0x21, 0xff},
 		text:        color.RGBA{0xff, 0xff, 0xff, 0xff},
+		icon:        color.RGBA{0xff, 0x00, 0x00, 0xff},
 		hyperlink:   color.RGBA{0x99, 0x99, 0xff, 0xff},
 		placeholder: color.RGBA{0xb2, 0xb2, 0xb2, 0xff},
 		primary:     color.RGBA{0x1a, 0x23, 0x7e, 0xff},
@@ -69,6 +71,11 @@ func (t *builtinTheme) HyperlinkColor() color.Color {
 // TextColor returns the theme's standard text colour
 func (t *builtinTheme) TextColor() color.Color {
 	return t.text
+}
+
+// IconColor returns the theme's standard text colour
+func (t *builtinTheme) IconColor() color.Color {
+	return t.icon
 }
 
 // PlaceHolderColor returns the theme's placeholder text colour
@@ -204,6 +211,11 @@ func HyperlinkColor() color.Color {
 // TextColor returns the theme's standard text colour
 func TextColor() color.Color {
 	return current().TextColor()
+}
+
+// IconColor returns the theme's standard text colour
+func IconColor() color.Color {
+	return current().IconColor()
 }
 
 // PlaceHolderColor returns the theme's standard text colour
