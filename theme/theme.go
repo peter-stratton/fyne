@@ -18,12 +18,10 @@ type builtinTheme struct {
 	regular, bold, italic, bolditalic, monospace                    fyne.Resource
 }
 
-var lightBackground = color.RGBA{0xf5, 0xf5, 0xf5, 0xff}
-
 // LightTheme defines the built in light theme colours and sizes
 func LightTheme() fyne.Theme {
 	theme := &builtinTheme{
-		background:  lightBackground,
+		background:  color.RGBA{0xf5, 0xf5, 0xf5, 0xff},
 		button:      color.RGBA{0xd9, 0xd9, 0xd9, 0xff},
 		text:        color.RGBA{0x21, 0x21, 0x21, 0xff},
 		hyperlink:   color.RGBA{0x0, 0x0, 0xd9, 0xff},

@@ -3,39 +3,25 @@ package theme
 import "fyne.io/fyne"
 
 // ThemedResource is a resource wrapper that will return an appropriate resource
-// for the currently selected theme. In this implementation it chooses between a dark
-// and light alternative to match the current setting.
+// for the currently selected theme.
 type ThemedResource struct {
-	dark  fyne.Resource
-	light fyne.Resource
+	source *fyne.DynamicResource
 }
 
-func isThemeLight() bool {
-	return fyne.CurrentApp().Settings().Theme().BackgroundColor() == lightBackground
-}
-
-// Name returns the underlrying resource name (used for caching)
+// Name returns the underlying resource name (used for caching)
 func (res *ThemedResource) Name() string {
-	if isThemeLight() {
-		return res.light.Name()
-	}
-
-	return res.dark.Name()
+	return res.source.Name()
 }
 
 // Content returns the underlying content of the correct resource for the current theme
 func (res *ThemedResource) Content() []byte {
-	if isThemeLight() {
-		return res.light.Content()
-	}
-
-	return res.dark.Content()
+	return res.source.Content()
 }
 
+// TODO: unfuck all of this stuff
 // NewThemedResource creates a resource that adapts to the current theme setting.
-// It is currently a simple pairing of a dark and light variant of the same resource.
-func NewThemedResource(dark, light fyne.Resource) *ThemedResource {
-	return &ThemedResource{dark, light}
+func NewThemedResource(res fyne.StaticResource) *ThemedResource {
+	return &ThemedResource{}
 }
 
 var (
@@ -51,56 +37,56 @@ var (
 )
 
 func init() {
-	cancel = &ThemedResource{cancelDark, cancelLight}
-	confirm = &ThemedResource{checkDark, checkLight}
-	delete = &ThemedResource{deleteDark, deleteLight}
-	search = &ThemedResource{searchDark, searchLight}
-	searchReplace = &ThemedResource{searchreplaceDark, searchreplaceLight}
+	cancel = &ThemedResource{cancelDark}
+	confirm = &ThemedResource{checkDark}
+	delete = &ThemedResource{deleteDark}
+	search = &ThemedResource{searchDark}
+	searchReplace = &ThemedResource{searchreplaceDark}
 
-	checked = &ThemedResource{checkboxDark, checkboxLight}
-	unchecked = &ThemedResource{checkboxblankDark, checkboxblankLight}
-	radioButton = &ThemedResource{radiobuttonDark, radiobuttonLight}
-	radioButtonChecked = &ThemedResource{radiobuttoncheckedDark, radiobuttoncheckedLight}
+	checked = &ThemedResource{checkboxDark}
+	unchecked = &ThemedResource{checkboxblankDark}
+	radioButton = &ThemedResource{radiobuttonDark}
+	radioButtonChecked = &ThemedResource{radiobuttoncheckedDark}
 
-	contentAdd = &ThemedResource{contentaddDark, contentaddLight}
-	contentRemove = &ThemedResource{contentremoveDark, contentremoveLight}
-	contentCut = &ThemedResource{contentcutDark, contentcutLight}
-	contentCopy = &ThemedResource{contentcopyDark, contentcopyLight}
-	contentPaste = &ThemedResource{contentpasteDark, contentpasteLight}
-	contentRedo = &ThemedResource{contentredoDark, contentredoLight}
-	contentUndo = &ThemedResource{contentundoDark, contentundoLight}
+	contentAdd = &ThemedResource{contentaddDark}
+	contentRemove = &ThemedResource{contentremoveDark}
+	contentCut = &ThemedResource{contentcutDark}
+	contentCopy = &ThemedResource{contentcopyDark}
+	contentPaste = &ThemedResource{contentpasteDark}
+	contentRedo = &ThemedResource{contentredoDark}
+	contentUndo = &ThemedResource{contentundoDark}
 
-	documentCreate = &ThemedResource{documentcreateDark, documentcreateLight}
-	documentPrint = &ThemedResource{documentprintDark, documentprintLight}
-	documentSave = &ThemedResource{documentsaveDark, documentsaveLight}
+	documentCreate = &ThemedResource{documentcreateDark}
+	documentPrint = &ThemedResource{documentprintDark}
+	documentSave = &ThemedResource{documentsaveDark}
 
-	info = &ThemedResource{infoDark, infoLight}
-	question = &ThemedResource{questionDark, questionLight}
-	warning = &ThemedResource{warningDark, warningLight}
+	info = &ThemedResource{infoDark}
+	question = &ThemedResource{questionDark}
+	warning = &ThemedResource{warningDark}
 
-	mailAttachment = &ThemedResource{mailattachmentDark, mailattachmentLight}
-	mailCompose = &ThemedResource{mailcomposeDark, mailcomposeLight}
-	mailForward = &ThemedResource{mailforwardDark, mailforwardLight}
-	mailReply = &ThemedResource{mailreplyDark, mailreplyLight}
-	mailReplyAll = &ThemedResource{mailreplyallDark, mailreplyallLight}
-	mailSend = &ThemedResource{mailsendDark, mailsendLight}
+	mailAttachment = &ThemedResource{mailattachmentDark}
+	mailCompose = &ThemedResource{mailcomposeDark}
+	mailForward = &ThemedResource{mailforwardDark}
+	mailReply = &ThemedResource{mailreplyDark}
+	mailReplyAll = &ThemedResource{mailreplyallDark}
+	mailSend = &ThemedResource{mailsendDark}
 
-	arrowBack = &ThemedResource{arrowbackDark, arrowbackLight}
-	arrowDown = &ThemedResource{arrowdownDark, arrowdownLight}
-	arrowForward = &ThemedResource{arrowforwardDark, arrowforwardLight}
-	arrowUp = &ThemedResource{arrowupDark, arrowupLight}
+	arrowBack = &ThemedResource{arrowbackDark}
+	arrowDown = &ThemedResource{arrowdownDark}
+	arrowForward = &ThemedResource{arrowforwardDark}
+	arrowUp = &ThemedResource{arrowupDark}
 
-	folder = &ThemedResource{folderDark, folderLight}
-	folderNew = &ThemedResource{foldernewDark, foldernewLight}
-	folderOpen = &ThemedResource{folderopenDark, folderopenLight}
-	help = &ThemedResource{helpDark, helpLight}
-	home = &ThemedResource{homeDark, homeLight}
+	folder = &ThemedResource{folderDark}
+	folderNew = &ThemedResource{foldernewDark}
+	folderOpen = &ThemedResource{folderopenDark}
+	help = &ThemedResource{helpDark}
+	home = &ThemedResource{homeDark}
 
-	viewFullScreen = &ThemedResource{viewfullscreenDark, viewfullscreenLight}
-	viewRefresh = &ThemedResource{viewrefreshDark, viewrefreshLight}
-	viewZoomFit = &ThemedResource{viewzoomfitDark, viewzoomfitLight}
-	viewZoomIn = &ThemedResource{viewzoominDark, viewzoominLight}
-	viewZoomOut = &ThemedResource{viewzoomoutDark, viewzoomoutLight}
+	viewFullScreen = &ThemedResource{viewfullscreenDark}
+	viewRefresh = &ThemedResource{viewrefreshDark}
+	viewZoomFit = &ThemedResource{viewzoomfitDark}
+	viewZoomIn = &ThemedResource{viewzoominDark}
+	viewZoomOut = &ThemedResource{viewzoomoutDark}
 }
 
 // FyneLogo returns a resource containing the Fyne logo
