@@ -1,11 +1,12 @@
 package widget
 
 import (
+	"image/color"
+
 	"fyne.io/fyne"
 	"fyne.io/fyne/canvas"
 	"fyne.io/fyne/driver/desktop"
 	"fyne.io/fyne/theme"
-	"image/color"
 )
 
 type buttonRenderer struct {
@@ -73,7 +74,7 @@ func (b *buttonRenderer) BackgroundColor() color.Color {
 	if b.button.Style == PrimaryButton && !b.button.disabled {
 		return theme.PrimaryColor()
 	} else if b.button.disabled {
-		return theme.DisabledColor()
+		return theme.DisabledIconColor()
 	}
 
 	if b.button.hovered {

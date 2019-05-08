@@ -8,15 +8,15 @@ type Theme interface {
 	ButtonColor() color.Color
 	HyperlinkColor() color.Color
 	TextColor() color.Color
+	DisabledTextColor() color.Color
 	IconColor() color.Color
+	DisabledIconColor() color.Color
 	PlaceHolderColor() color.Color
 	PrimaryColor() color.Color
 	HoverColor() color.Color
 	FocusColor() color.Color
 	ScrollBarColor() color.Color
 	ShadowColor() color.Color
-	DisabledColor() color.Color
-	DisabledTextColor() color.Color
 
 	TextSize() int
 	TextFont() Resource
