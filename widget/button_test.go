@@ -1,6 +1,7 @@
 package widget
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
@@ -45,6 +46,30 @@ func TestButton_Style(t *testing.T) {
 
 	button.Style = PrimaryButton
 	assert.NotEqual(t, bg, Renderer(button).BackgroundColor())
+}
+
+func TestButton_DisabledColor(t *testing.T) {
+	button := NewButton("Test", nil)
+	bg := Renderer(button).BackgroundColor()
+	button.Style = DefaultButton
+	assert.Equal(t, bg, theme.ButtonColor())
+
+	button.Disable()
+	bg = Renderer(button).BackgroundColor()
+	assert.Equal(t, bg, theme.HoverColor())
+}
+
+func TestButton_DisabledIcon(t *testing.T) {
+	button := NewButtonWithIcon("Test", theme.CancelIcon(), nil)
+	render := Renderer(button).(*buttonRenderer)
+	assert.Equal(t, render.icon.Resource.Name(), theme.CancelIcon().Name())
+
+	button.Disable()
+	assert.Equal(t, render.icon.Resource.Name(), fmt.Sprintf("disabled_%v", theme.CancelIcon().Name()))
+
+	button.Enable()
+	assert.Equal(t, render.icon.Resource.Name(), theme.CancelIcon().Name())
+
 }
 
 func TestButton_Tapped(t *testing.T) {
