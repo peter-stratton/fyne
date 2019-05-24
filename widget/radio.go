@@ -84,6 +84,9 @@ func (r *radioRenderer) Layout(size fyne.Size) {
 func (r *radioRenderer) ApplyTheme() {
 	for _, item := range r.items {
 		item.label.Color = theme.TextColor()
+		if r.radio.disabled {
+			item.label.Color = theme.DisabledTextColor()
+		}
 	}
 
 	r.Refresh()
@@ -120,8 +123,14 @@ func (r *radioRenderer) Refresh() {
 
 		if r.radio.Selected == option {
 			item.icon.Resource = theme.RadioButtonCheckedIcon()
+			if r.radio.disabled {
+				item.icon.Resource = theme.NewDisabledResource(theme.RadioButtonCheckedIcon())
+			}
 		} else {
 			item.icon.Resource = theme.RadioButtonIcon()
+			if r.radio.disabled {
+				item.icon.Resource = theme.NewDisabledResource(theme.RadioButtonIcon())
+			}
 		}
 	}
 
@@ -176,11 +185,13 @@ func (r *Radio) Hide() {
 // Enable this widget, if it was previously disabled
 func (r *Radio) Enable() {
 	r.enable(r)
+	Renderer(r).ApplyTheme()
 }
 
 // Disable this widget, if it was previously enabled
 func (r *Radio) Disable() {
 	r.disable(r)
+	Renderer(r).ApplyTheme()
 }
 
 // Append adds a new option to the end of a Radio widget.
