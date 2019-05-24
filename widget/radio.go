@@ -1,12 +1,11 @@
 package widget
 
 import (
-	"image/color"
-	"math"
-
 	"fyne.io/fyne"
 	"fyne.io/fyne/canvas"
 	"fyne.io/fyne/theme"
+	"image/color"
+	"math"
 )
 
 type radioRenderItem struct {
@@ -203,28 +202,30 @@ func (r *Radio) Append(option string) {
 
 // Tapped is called when a pointer tapped event is captured and triggers any change handler
 func (r *Radio) Tapped(event *fyne.PointEvent) {
-	index := 0
-	if r.Horizontal {
-		index = int(math.Floor(float64(event.Position.X) / float64(r.itemWidth())))
-	} else {
-		index = int(math.Floor(float64(event.Position.Y) / float64(r.itemHeight())))
-	}
+	if r.Enabled() {
+		index := 0
+		if r.Horizontal {
+			index = int(math.Floor(float64(event.Position.X) / float64(r.itemWidth())))
+		} else {
+			index = int(math.Floor(float64(event.Position.Y) / float64(r.itemHeight())))
+		}
 
-	if index < 0 || index >= len(r.Options) { // in the padding
-		return
-	}
-	clicked := r.Options[index]
+		if index < 0 || index >= len(r.Options) { // in the padding
+			return
+		}
+		clicked := r.Options[index]
 
-	if r.Selected == clicked {
-		r.Selected = ""
-	} else {
-		r.Selected = clicked
-	}
+		if r.Selected == clicked {
+			r.Selected = ""
+		} else {
+			r.Selected = clicked
+		}
 
-	if r.OnChanged != nil {
-		r.OnChanged(r.Selected)
+		if r.OnChanged != nil {
+			r.OnChanged(r.Selected)
+		}
+		Renderer(r).Refresh()
 	}
-	Renderer(r).Refresh()
 }
 
 // TappedSecondary is called when a secondary pointer tapped event is captured
