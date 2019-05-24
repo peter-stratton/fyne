@@ -96,8 +96,6 @@ func (b *buttonRenderer) Refresh() {
 				b.icon.Resource = b.button.disabledIcon
 			} else {
 				b.icon.Resource = b.button.Icon
-				println(b.icon.Resource.Name())
-				println(b.icon.Resource.Content())
 			}
 		}
 		b.icon.Hidden = false
@@ -247,11 +245,9 @@ func NewButton(label string, tapped func()) *Button {
 	return button
 }
 
-// NewButtonWithIcon creates a new button widget with the specified label,
-// themed icon and tap handler
+// NewButtonWithIcon creates a new button widget with the specified label, themed icon and tap handler
 func NewButtonWithIcon(label string, icon fyne.Resource, tapped func()) *Button {
-	button := &Button{baseWidget{}, label, DefaultButton, icon, nil, tapped, false}
-	button.disabledIcon = theme.NewDisabledResource(button.Icon)
+	button := &Button{baseWidget{}, label, DefaultButton, icon, theme.NewDisabledResource(icon), tapped, false}
 
 	Renderer(button).Layout(button.MinSize())
 	return button
