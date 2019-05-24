@@ -3,6 +3,7 @@ package theme
 import (
 	"bytes"
 	"encoding/xml"
+	"fmt"
 	"log"
 
 	"fyne.io/fyne"
@@ -50,6 +51,45 @@ func NewThemedResource(dark, light fyne.Resource) *ThemedResource {
 	}
 	return &ThemedResource{
 		source: dark,
+	}
+}
+
+// disabledResource is a resource wrapper that will return an appropriate resource colorized by
+// the current theme's `DisabledIconColor` color.
+type DisabledResource struct {
+	source fyne.Resource
+}
+
+// Name returns the resource source name prefixed with `disabled_` (used for caching)
+func (res *DisabledResource) Name() string {
+	return fmt.Sprintf("disabled_%s", res.source.Name())
+}
+
+// TODO: refactor ThemedResource and disabledResource Content() to not have code duplication
+func (res *DisabledResource) Content() []byte {
+	rdr := bytes.NewReader(res.source.Content())
+	clr := fyne.CurrentApp().Settings().Theme().DisabledIconColor()
+	s, err := svgFromXML(rdr)
+	if err != nil {
+		fyne.LogError("could not load SVG, falling back to static content:", err)
+		return res.source.Content()
+	}
+	if err := s.replaceFillColor(rdr, clr); err != nil {
+		fyne.LogError("could not replace fill color, falling back to static content:", err)
+		return res.source.Content()
+	}
+	b, err := xml.Marshal(s)
+	if err != nil {
+		fyne.LogError("could not marshal svg, falling back to static content:", err)
+		return res.source.Content()
+	}
+	return b
+}
+
+// NewDisabledResource creates a resource that adapts to the current theme's DisabledIconColor setting.
+func NewDisabledResource(res fyne.Resource) *DisabledResource {
+	return &DisabledResource{
+		source: res,
 	}
 }
 

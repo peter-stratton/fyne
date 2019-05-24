@@ -74,7 +74,7 @@ func (b *buttonRenderer) BackgroundColor() color.Color {
 	if b.button.Style == PrimaryButton && !b.button.disabled {
 		return theme.PrimaryColor()
 	} else if b.button.disabled {
-		return theme.DisabledIconColor()
+		return theme.HoverColor()
 	}
 
 	if b.button.hovered {
@@ -84,6 +84,7 @@ func (b *buttonRenderer) BackgroundColor() color.Color {
 }
 
 func (b *buttonRenderer) Refresh() {
+	println("Refresh() Called!")
 	b.label.Text = b.button.Text
 
 	if b.button.Icon != nil {
@@ -91,7 +92,13 @@ func (b *buttonRenderer) Refresh() {
 			b.icon = canvas.NewImageFromResource(b.button.Icon)
 			b.objects = append(b.objects, b.icon)
 		} else {
-			b.icon.Resource = b.button.Icon
+			if b.button.disabled {
+				b.icon.Resource = b.button.disabledIcon
+			} else {
+				b.icon.Resource = b.button.Icon
+				println(b.icon.Resource.Name())
+				println(b.icon.Resource.Content())
+			}
 		}
 		b.icon.Hidden = false
 	} else if b.icon != nil {
@@ -115,6 +122,7 @@ type Button struct {
 	Text  string
 	Style ButtonStyle
 	Icon  fyne.Resource
+	disabledIcon fyne.Resource
 
 	OnTapped func() `json:"-"`
 	hovered  bool
@@ -233,7 +241,7 @@ func (b *Button) SetIcon(icon fyne.Resource) {
 
 // NewButton creates a new button widget with the set label and tap handler
 func NewButton(label string, tapped func()) *Button {
-	button := &Button{baseWidget{}, label, DefaultButton, nil, tapped, false}
+	button := &Button{baseWidget{}, label, DefaultButton, nil, nil, tapped, false}
 
 	Renderer(button).Layout(button.MinSize())
 	return button
@@ -242,7 +250,8 @@ func NewButton(label string, tapped func()) *Button {
 // NewButtonWithIcon creates a new button widget with the specified label,
 // themed icon and tap handler
 func NewButtonWithIcon(label string, icon fyne.Resource, tapped func()) *Button {
-	button := &Button{baseWidget{}, label, DefaultButton, icon, tapped, false}
+	button := &Button{baseWidget{}, label, DefaultButton, icon, nil, tapped, false}
+	button.disabledIcon = theme.NewDisabledResource(button.Icon)
 
 	Renderer(button).Layout(button.MinSize())
 	return button
