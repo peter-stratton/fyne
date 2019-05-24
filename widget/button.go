@@ -84,7 +84,6 @@ func (b *buttonRenderer) BackgroundColor() color.Color {
 }
 
 func (b *buttonRenderer) Refresh() {
-	println("Refresh() Called!")
 	b.label.Text = b.button.Text
 
 	if b.button.Icon != nil {
