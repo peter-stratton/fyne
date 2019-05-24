@@ -54,7 +54,7 @@ func NewThemedResource(dark, light fyne.Resource) *ThemedResource {
 	}
 }
 
-// disabledResource is a resource wrapper that will return an appropriate resource colorized by
+// DisabledResource is a resource wrapper that will return an appropriate resource colorized by
 // the current theme's `DisabledIconColor` color.
 type DisabledResource struct {
 	source fyne.Resource
@@ -65,6 +65,7 @@ func (res *DisabledResource) Name() string {
 	return fmt.Sprintf("disabled_%s", res.source.Name())
 }
 
+// Content returns the disabled style content of the correct resource for the current theme
 // TODO: refactor ThemedResource and disabledResource Content() to not have code duplication
 func (res *DisabledResource) Content() []byte {
 	rdr := bytes.NewReader(res.source.Content())
