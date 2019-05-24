@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/xml"
 	"fmt"
+	"image/color"
 	"log"
 
 	"fyne.io/fyne"
@@ -22,23 +23,8 @@ func (res *ThemedResource) Name() string {
 
 // Content returns the underlying content of the correct resource for the current theme
 func (res *ThemedResource) Content() []byte {
-	rdr := bytes.NewReader(res.source.Content())
 	clr := fyne.CurrentApp().Settings().Theme().IconColor()
-	s, err := svgFromXML(rdr)
-	if err != nil {
-		fyne.LogError("could not load SVG, falling back to static content:", err)
-		return res.source.Content()
-	}
-	if err := s.replaceFillColor(rdr, clr); err != nil {
-		fyne.LogError("could not replace fill color, falling back to static content:", err)
-		return res.source.Content()
-	}
-	b, err := xml.Marshal(s)
-	if err != nil {
-		fyne.LogError("could not marshal svg, falling back to static content:", err)
-		return res.source.Content()
-	}
-	return b
+	return colorizeResource(res.source, clr)
 }
 
 // NewThemedResource creates a resource that adapts to the current theme setting.
@@ -66,25 +52,9 @@ func (res *DisabledResource) Name() string {
 }
 
 // Content returns the disabled style content of the correct resource for the current theme
-// TODO: refactor ThemedResource and disabledResource Content() to not have code duplication
 func (res *DisabledResource) Content() []byte {
-	rdr := bytes.NewReader(res.source.Content())
 	clr := fyne.CurrentApp().Settings().Theme().DisabledIconColor()
-	s, err := svgFromXML(rdr)
-	if err != nil {
-		fyne.LogError("could not load SVG, falling back to static content:", err)
-		return res.source.Content()
-	}
-	if err := s.replaceFillColor(rdr, clr); err != nil {
-		fyne.LogError("could not replace fill color, falling back to static content:", err)
-		return res.source.Content()
-	}
-	b, err := xml.Marshal(s)
-	if err != nil {
-		fyne.LogError("could not marshal svg, falling back to static content:", err)
-		return res.source.Content()
-	}
-	return b
+	return colorizeResource(res.source, clr)
 }
 
 // NewDisabledResource creates a resource that adapts to the current theme's DisabledIconColor setting.
@@ -92,6 +62,25 @@ func NewDisabledResource(res fyne.Resource) *DisabledResource {
 	return &DisabledResource{
 		source: res,
 	}
+}
+
+func colorizeResource(res fyne.Resource, clr color.Color) []byte {
+	rdr := bytes.NewReader(res.Content())
+	s, err := svgFromXML(rdr)
+	if err != nil {
+		fyne.LogError("could not load SVG, falling back to static content:", err)
+		return res.Content()
+	}
+	if err := s.replaceFillColor(rdr, clr); err != nil {
+		fyne.LogError("could not replace fill color, falling back to static content:", err)
+		return res.Content()
+	}
+	b, err := xml.Marshal(s)
+	if err != nil {
+		fyne.LogError("could not marshal svg, falling back to static content:", err)
+		return res.Content()
+	}
+	return b
 }
 
 var (
